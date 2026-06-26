@@ -1,0 +1,19 @@
+{
+  "name": "AI 股票研究助理",
+  "short_name": "ResearchAI",
+  "description": "給股票新手使用的 AI Stock Research Coach，整理每日市場題材、研究優先度、價格觀察區與新手學習內容。",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "theme_color": "#0f172a",
+  "background_color": "#f8fafc",
+  "lang": "zh-Hant",
+  "icons": [
+    {
+      "src": "/icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ]
+}

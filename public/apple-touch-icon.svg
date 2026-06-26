@@ -1,0 +1,6 @@
+<svg width="180" height="180" viewBox="0 0 180 180" xmlns="http://www.w3.org/2000/svg">
+  <rect width="180" height="180" rx="38" fill="#0f172a"/>
+  <path d="M34 122h112v14H34z" fill="#e2e8f0"/>
+  <path d="M42 114l26-34 24 20 39-54 15 12-51 69-26-21-18 25z" fill="#38bdf8"/>
+  <text x="90" y="157" text-anchor="middle" font-family="Arial, sans-serif" font-size="24" font-weight="700" fill="#f8fafc">AI</text>
+</svg>
