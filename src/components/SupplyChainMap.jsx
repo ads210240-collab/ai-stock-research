@@ -1,4 +1,8 @@
-export default function SupplyChainMap({ theme }) {
+function stockIdFromText(text) {
+  return String(text).match(/\b\d{4}\b/)?.[0];
+}
+
+export default function SupplyChainMap({ theme, onStock }) {
   return (
     <section className="rounded border border-line bg-white p-4 shadow-soft">
       <p className="text-xs font-semibold uppercase text-muted">Supply Chain Map</p>
@@ -11,7 +15,9 @@ export default function SupplyChainMap({ theme }) {
             {node.role && <p className="mt-2 text-sm leading-6 text-muted">{node.role}</p>}
             <div className="mt-3 flex flex-wrap gap-2">
               {node.stocks.map((stock) => (
-                <span key={stock} className="rounded border border-line bg-white px-2 py-1 text-xs">{stock}</span>
+                stockIdFromText(stock) && onStock
+                  ? <button key={stock} onClick={() => onStock(stockIdFromText(stock))} className="rounded border border-line bg-white px-2 py-1 text-left text-xs hover:border-accent hover:text-accent">{stock}</button>
+                  : <span key={stock} className="rounded border border-line bg-white px-2 py-1 text-xs">{stock}</span>
               ))}
             </div>
           </div>

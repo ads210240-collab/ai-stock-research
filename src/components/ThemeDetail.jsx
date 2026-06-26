@@ -9,6 +9,7 @@ import DecisionLabel from "./DecisionLabel.jsx";
 import ThemeTrendForecast from "./ThemeTrendForecast.jsx";
 import MacroImpactPanel from "./MacroImpactPanel.jsx";
 import ResearchMetrics from "./ResearchMetrics.jsx";
+import ThemeResearchBrief from "./ThemeResearchBrief.jsx";
 import { starString } from "../utils/score.js";
 
 export default function ThemeDetail({ theme, stocks, sources, macroFactors, onBack, onStock }) {
@@ -20,6 +21,10 @@ export default function ThemeDetail({ theme, stocks, sources, macroFactors, onBa
       <button onClick={onBack} className="flex items-center gap-2 text-sm font-medium text-muted hover:text-ink">
         <ArrowLeft size={17} /> 回題材中心
       </button>
+      <section className="rounded border border-blue-100 bg-blue-50 p-4 shadow-soft">
+        <p className="text-xs font-semibold text-accent">AI 今日結論</p>
+        <p className="mt-1 text-lg font-semibold leading-7">{theme.aiConclusion}</p>
+      </section>
       <section className="rounded border border-line bg-white p-5 shadow-soft">
         <p className="text-xs font-semibold uppercase text-muted">Theme Detail</p>
         <div className="mt-2 flex flex-col gap-4 lg:flex-row lg:items-start lg:justify-between">
@@ -42,12 +47,13 @@ export default function ThemeDetail({ theme, stocks, sources, macroFactors, onBa
           </div>
         </div>
       </section>
+      <ThemeResearchBrief theme={theme} />
       <ResearchMetrics metrics={theme.researchMetrics} />
       <ScoreBreakdown breakdown={theme.scoreBreakdown} type="theme" />
       <ThemeTrendForecast theme={theme} />
       <MacroImpactPanel factors={macroFactors} theme={theme} />
       <SourceConsensus sources={relatedSources} />
-      {theme.id === "ai-server" ? <SupplyChainTree tree={theme.supplyChain} /> : <SupplyChainMap theme={theme} />}
+      {theme.id === "ai-server" ? <SupplyChainTree tree={theme.supplyChain} onStock={onStock} /> : <SupplyChainMap theme={theme} onStock={onStock} />}
       <RelatedStockTable stocks={relatedStocks} onStock={onStock} />
       <ThemeRiskPanel theme={theme} />
     </div>

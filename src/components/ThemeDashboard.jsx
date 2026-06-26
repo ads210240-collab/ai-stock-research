@@ -7,11 +7,16 @@ import MacroImpactPanel from "./MacroImpactPanel.jsx";
 import DailyMission from "./DailyMission.jsx";
 import CancerDailyPanel from "./CancerDailyPanel.jsx";
 import { cancerDailyBriefs } from "../mockData/sources.js";
+import ThemeTabs from "./ThemeTabs.jsx";
+import MarketScenarioPanel from "./MarketScenarioPanel.jsx";
+import { marketScenarios } from "../mockData/themes.js";
 
 export default function ThemeDashboard({ marketSummary, macroFactors, todayFocus, themes, stocks, onTheme, onStock }) {
   return (
     <div className="space-y-5">
-      <DailyMission themes={themes} stocks={stocks} onTheme={onTheme} onStock={onStock} />
+      <DailyMission themes={themes} stocks={stocks} marketSummary={marketSummary} onTheme={onTheme} onStock={onStock} />
+      <MarketScenarioPanel scenarios={marketScenarios} />
+      <ThemeTabs themes={themes} stocks={stocks} onTheme={onTheme} onStock={onStock} />
       <section className="grid gap-4 lg:grid-cols-[1.1fr_0.9fr]">
         <MarketSummary summary={marketSummary} />
         <div className="hidden lg:block">
@@ -20,8 +25,10 @@ export default function ThemeDashboard({ marketSummary, macroFactors, todayFocus
       </section>
       <TodayFocus focus={todayFocus} themes={themes} onTheme={onTheme} />
       <CancerDailyPanel briefs={cancerDailyBriefs} />
-      <MacroImpactPanel factors={macroFactors} />
-      <section>
+      <div className="hidden xl:block">
+        <MacroImpactPanel factors={macroFactors} />
+      </div>
+      <section className="hidden xl:block">
         <div className="mb-3 flex items-end justify-between gap-3">
           <div>
             <h1 className="text-2xl font-semibold sm:text-3xl">今天哪些題材值得研究？</h1>

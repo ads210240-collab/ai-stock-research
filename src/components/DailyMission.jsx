@@ -1,7 +1,7 @@
 import ResearchPriority from "./ResearchPriority.jsx";
 import DecisionLabel from "./DecisionLabel.jsx";
 
-export default function DailyMission({ themes, stocks, onTheme, onStock }) {
+export default function DailyMission({ themes, stocks, marketSummary, onTheme, onStock }) {
   const themeIds = ["mlcc-passive", "ai-server", "pcb-ccl"];
   const stockIds = ["2327", "2308", "2383", "3017", "3037"];
   const missionThemes = themeIds.map((id) => themes.find((theme) => theme.id === id)).filter(Boolean);
@@ -10,8 +10,14 @@ export default function DailyMission({ themes, stocks, onTheme, onStock }) {
   return (
     <section className="rounded border border-line bg-white p-3 shadow-soft sm:p-4">
       <p className="text-xs font-semibold uppercase text-muted">AI Stock Research Coach</p>
-      <h1 className="mt-1 text-2xl font-semibold leading-tight sm:text-3xl">AI 今日任務</h1>
-      <p className="mt-2 max-w-3xl text-sm leading-6 text-muted">今天 AI 幫你整理好了：看 3 個題材、5 檔股票、學 1 個觀念。這不是買賣清單，是研究清單。</p>
+      <h1 className="mt-1 text-2xl font-semibold leading-tight sm:text-3xl">今日 AI 研究任務</h1>
+      <p className="mt-2 max-w-3xl text-sm leading-6 text-muted">今天 AI 幫你整理好了：先看市場一句話、3 個題材、5 檔股票與一個風險提醒。這不是買賣清單，是研究清單。</p>
+      <div className="mt-3 grid gap-2 sm:grid-cols-2 lg:grid-cols-4">
+        <SummaryTile title="今日市場一句話" body={marketSummary?.sevenDayChange || "市場正在從題材熱度轉向基本面驗證。"} />
+        <SummaryTile title="今日熱門題材" body={missionThemes.map((theme) => theme.name).join("、")} />
+        <SummaryTile title="AI 今日結論" body={marketSummary?.aiSummary || "先研究高共識題材，避免追高。"} />
+        <SummaryTile title="市場風險提醒" body={marketSummary?.volatilityAlert || "高波動題材先放觀察清單。"} />
+      </div>
       <div className="mt-3 grid gap-3 sm:mt-4 lg:grid-cols-[0.8fr_1.2fr]">
         <div className="rounded border border-line bg-paper p-3">
           <h2 className="font-semibold">今天建議研究題材</h2>
@@ -48,6 +54,15 @@ export default function DailyMission({ themes, stocks, onTheme, onStock }) {
         </div>
       </div>
     </section>
+  );
+}
+
+function SummaryTile({ title, body }) {
+  return (
+    <div className="rounded border border-line bg-paper p-3">
+      <p className="text-xs font-semibold text-muted">{title}</p>
+      <p className="mt-1 text-sm leading-6">{body}</p>
+    </div>
   );
 }
 

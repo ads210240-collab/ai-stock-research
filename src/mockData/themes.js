@@ -319,6 +319,31 @@ const baseThemes = [
     risks: { overheated: "題材股過熱風險高", hype: "短線炒作比例高", fundamentals: "基本面尚未普遍落地", consensus: "S/A 級來源有限", impactedStocks: ["上銀 2049", "所羅門 2359", "佳能 2374"] }
   },
   {
+    id: "auto-electronics",
+    name: "車用電子",
+    heat: 67,
+    consensus: 70,
+    risk: "中",
+    trend: "持平",
+    plain: "車用電子包含功率元件、被動元件、連接器與感測器，重點是長約與認證。",
+    sourceCount: 11,
+    stockCount: 8,
+    beginnerFit: 72,
+    emerging: false,
+    whyNow: "EV 與智能車需求雖然沒有 AI Server 熱，但車用認證、長約與安全規格讓部分零組件具備長期研究價值。",
+    description: "車用電子不是短線最熱門題材，但適合新手學習供應鏈認證、產品週期與長約邏輯。",
+    supplyChain: [
+      { segment: "被動元件", role: "車用 MLCC 與電阻需要高可靠度。", stocks: ["國巨 2327", "華新科 2492"] },
+      { segment: "功率半導體", role: "EV 與車用電源轉換需求。", stocks: ["富鼎 8261", "杰力 5299"] },
+      { segment: "連接器", role: "車用訊號與電源連接規格提高。", stocks: ["貿聯-KY 3665", "信邦 3023"] }
+    ],
+    trendForecast: { short: { label: "持平", reason: "市場主線仍在 AI，車用題材短線較低調。" }, mid: { label: "震盪", reason: "EV 需求與庫存變化仍需觀察。" }, long: { label: "結構成長", reason: "車用電子含量長期提升，但節奏較慢。" } },
+    macro: { sensitivity: "中", factors: ["美元 / 台幣匯率", "關稅 / 地緣政治", "油價"], explanation: "車用電子受出口、車廠需求與供應鏈移轉影響，短線不一定跟 AI 同步。" },
+    decision: "可觀察",
+    beginnerNote: "適合新手練習看長約、認證與產品週期，不適合用追熱門題材的方式看。",
+    risks: { overheated: "目前不算過熱", hype: "低中", fundamentals: "需看車用訂單、長約與認證進度", consensus: "來源穩定但熱度普通", impactedStocks: ["國巨 2327", "華新科 2492", "貿聯-KY 3665"] }
+  },
+  {
     id: "fx-benefit",
     name: "匯率受惠股",
     heat: 64,
@@ -415,6 +440,91 @@ function riskScore(risk, beginnerFit) {
   return Math.max(35, Math.min(92, beginnerFit - riskPenalty + 10));
 }
 
+function themeKeywords(theme) {
+  const map = {
+    "ai-server": ["NVIDIA", "大型科技股 CapEx", "PCB / CCL", "散熱", "Power", "MLCC"],
+    asic: ["美股 AI 晶片", "雲端自研晶片", "NRE", "量產時程", "先進製程"],
+    "pcb-ccl": ["AI Server", "高速訊號", "高階板材", "良率", "雲端客戶"],
+    abf: ["AI 晶片", "先進封裝", "CoWoS", "高階載板", "HPC"],
+    "mlcc-passive": ["AI Server", "高階 MLCC", "庫存循環", "車用電子", "交期"],
+    "power-supply": ["AI 機櫃", "耗電提升", "電源效率", "資料中心", "台達電"],
+    thermal: ["AI 晶片功耗", "液冷", "散熱模組", "新平台", "資料中心"],
+    memory: ["DRAM 報價", "HBM", "庫存去化", "NAND", "伺服器需求"],
+    "mosfet-power": ["電源轉換", "AI Server 電力架構", "庫存", "報價", "功率元件"],
+    robotics: ["自動化", "機器人題材", "AI 應用", "實際訂單", "高波動"],
+    "high-speed": ["高速傳輸", "Connector", "線束", "資料流量", "AI Server"],
+    connector: ["連接器", "高速傳輸", "資料中心", "車用", "規格升級"],
+    "auto-electronics": ["車用電子", "EV", "功率元件", "感測器", "長約"],
+    "fx-benefit": ["美元", "台幣匯率", "出口", "毛利", "匯兌"],
+    "us-ai-chain": ["NVIDIA", "Broadcom", "Microsoft", "Amazon", "Meta"],
+    "rate-cut": ["Fed", "降息", "成長股", "評價", "美元"],
+    "defensive-dividend": ["高股息", "防禦型", "現金流", "波動控制", "利率"]
+  };
+  return map[theme.id] || [theme.name, "法人報告", "市場共識", "價格位置", "基本面"];
+}
+
+function makeMarketSummaryLong(theme) {
+  const keys = themeKeywords(theme);
+  return `目前 ${theme.name} 的市場討論，核心不是單一個股會不會漲，而是資金正在確認「題材能不能連到基本面」。最近市場關注 ${keys.slice(0, 3).join("、")}，原因是 ${theme.whyNow} 從新手角度看，這個題材值得研究的地方在於供應鏈角色清楚，能把新聞、法人報告、財報與價格位置串成同一條邏輯。受惠公司通常不是全部一起受惠，而是會依照龍頭、受惠股、補漲股與高風險股分層輪動。今天研究這個題材，重點不是追最快上漲的股票，而是先看來源是否一致、營收或訂單是否能支持，以及目前價格是否已經反映太多期待。`;
+}
+
+function makeResearchReasons(theme) {
+  const keys = themeKeywords(theme);
+  return [
+    { label: "新聞", text: `${keys[0]} 相關消息讓市場重新檢查 ${theme.name} 供應鏈。` },
+    { label: "法人", text: `法人通常會從能見度、估值與族群輪動角度追蹤，現在共識分數為 ${theme.consensus}。` },
+    { label: "財報", text: theme.risks.fundamentals },
+    { label: "Podcast", text: "財經節目與股癌類內容適合拿來聽市場語氣，但只作重點整理，不當成明牌。" },
+    { label: "市場討論", text: `${theme.sourceCount} 個來源正在追蹤，熱度屬於 ${theme.heat >= 85 ? "高" : theme.heat >= 70 ? "中上" : "普通"}。` },
+    { label: "國際事件", text: theme.macro?.explanation || "需搭配國際利率、美元、費半與美股科技股情緒一起看。" }
+  ];
+}
+
+function makeMarketStory(theme) {
+  const storyMap = {
+    "ai-server": ["AI Server", "NVIDIA", "大型科技股 CapEx", "PCB / CCL", "散熱", "Power", "MLCC"],
+    asic: ["雲端自研晶片", "ASIC", "設計服務", "NRE", "量產", "估值重評"],
+    "pcb-ccl": ["AI Server", "高速訊號", "高階 CCL", "PCB 層數提升", "良率", "台股板材供應鏈"],
+    abf: ["AI 晶片", "CoWoS", "ABF 載板", "HPC", "封裝供需", "載板股"],
+    "mlcc-passive": ["AI Server", "穩壓需求", "高階 MLCC", "交期", "庫存復甦", "被動元件龍頭"],
+    "power-supply": ["AI Server", "耗電提升", "Power", "電源效率", "資料中心", "大型龍頭"],
+    thermal: ["AI 晶片", "功耗提高", "散熱", "液冷", "毛利率", "散熱模組股"],
+    memory: ["AI 訓練", "HBM", "DRAM 報價", "庫存去化", "景氣循環", "記憶體股"],
+    "mosfet-power": ["AI Server", "電源架構", "MOSFET", "功率 IC", "庫存報價", "中小型功率股"],
+    robotics: ["AI 應用", "機器人", "自動化", "實際訂單", "營收驗證", "高波動股"],
+    connector: ["AI Server", "高速傳輸", "連接器", "線束", "規格升級", "利基型供應鏈"],
+    "high-speed": ["AI Server", "資料流量", "高速介面", "線束", "連接器", "高速傳輸股"],
+    "auto-electronics": ["EV", "車用電子", "功率元件", "長約", "車廠需求", "車用供應鏈"]
+  };
+  return storyMap[theme.id] || [theme.name, "新聞", "法人", "基本面", "價格位置", "研究清單"];
+}
+
+function makeInvalidationReasons(theme) {
+  const keys = themeKeywords(theme);
+  return [
+    `如果 ${keys[0]} 需求或資本支出下修，題材熱度可能快速降溫。`,
+    "如果 Fed 不降息或利率重新上行，高估值題材會承壓。",
+    "如果財報、月營收或訂單沒有跟上，市場會重新檢查基本面支持。",
+    "如果股價短線已大幅上漲，即使題材沒變差，也可能進入震盪。"
+  ];
+}
+
+function makeLearningItems(theme) {
+  const map = {
+    "ai-server": ["AI Server 為什麼不是單一股票？", "CapEx 如何影響供應鏈？", "為什麼散熱、Power、MLCC 都會被帶動？"],
+    asic: ["ASIC 是什麼？", "NRE 跟量產差在哪？", "為什麼 ASIC 題材波動很大？"],
+    "pcb-ccl": ["PCB 和 CCL 差在哪？", "高速訊號為什麼需要高階板材？", "怎麼看板材股是否過熱？"],
+    abf: ["ABF 載板是什麼？", "CoWoS 如何影響 ABF？", "載板股為什麼有循環性？"],
+    "mlcc-passive": ["MLCC 是什麼？", "AI Server 為什麼需要更多被動元件？", "庫存循環怎麼看？"],
+    "power-supply": ["Power 為什麼重要？", "AI Server 耗電在哪？", "大型電源股和小型題材股差在哪？"],
+    thermal: ["散熱為什麼是 AI Server 剛需？", "液冷和氣冷差在哪？", "熱門股追高風險怎麼看？"],
+    memory: ["DRAM 報價怎麼影響股價？", "HBM 是什麼？", "循環股研究要看什麼？"],
+    "mosfet-power": ["MOSFET 是什麼？", "功率半導體如何連到 AI Server？", "報價與庫存為什麼重要？"],
+    robotics: ["機器人題材為什麼容易波動？", "題材和營收怎麼分辨？", "新手為什麼要小心概念股？"]
+  };
+  return map[theme.id] || [`${theme.name} 是什麼？`, "這個題材如何連到營收？", "新手該如何看風險？"];
+}
+
 function enrichTheme(theme) {
   const scoreBreakdown = {
     sourceConsensus: theme.consensus,
@@ -434,6 +544,12 @@ function enrichTheme(theme) {
       fundamentals: { score: scoreBreakdown.fundamentals, title: "基本面支持", plain: "是否有營收、EPS、訂單支持", why: theme.risks.fundamentals },
       volatility: { score: scoreBreakdown.beginnerRisk, title: "波動風險", plain: "新手是否容易受傷", why: theme.risks.overheated }
     },
+    marketSummaryLong: makeMarketSummaryLong(theme),
+    researchReasons: makeResearchReasons(theme),
+    marketStory: makeMarketStory(theme),
+    invalidationReasons: makeInvalidationReasons(theme),
+    learningItems: makeLearningItems(theme),
+    aiConclusion: `今天 ${theme.name} 的研究重點是：${theme.decision}，先看來源共識與價格位置，不要把題材熱度直接翻譯成追高。`,
     scoreReason: `熱度 ${theme.heat}、共識 ${theme.consensus}，搭配 ${theme.sourceCount} 個來源與風險等級「${theme.risk}」後，判斷為 ${theme.decision}。`
   };
 }
@@ -467,3 +583,10 @@ export const marketSummary = {
   aiSummary: "今天優先看高共識且價格沒有過度偏離的 AI 零組件；高波動題材先放觀察清單。",
   volatilityAlert: "ASIC、機器人與部分中小型功率半導體波動偏大；若近 20 日漲幅過大，即使題材強也不適合新手重壓。"
 };
+
+export const marketScenarios = [
+  { title: "Fed 降息", flow: ["Fed 降息", "資金風險偏好提高", "AI", "PCB", "MLCC", "Power", "散熱"], impact: "成長股與高估值科技股通常較受惠，但若降息來自景氣轉弱，仍要看企業獲利。" },
+  { title: "中東戰爭", flow: ["地緣風險升高", "油價", "通膨", "Fed 預期", "電子股波動", "黃金 / 軍工"], impact: "市場可能先避險，電子股短線承壓，防禦與原物料題材被重新關注。" },
+  { title: "美元升值", flow: ["美元升值", "台幣偏弱", "出口股", "記憶體", "AI 供應鏈", "匯兌影響"], impact: "出口股短期可能受惠，但匯率只是加分項，仍要回到毛利與訂單。" },
+  { title: "美股 AI 大漲", flow: ["NVIDIA / Broadcom", "費半", "台股 AI", "ASIC", "PCB / CCL", "散熱"], impact: "台股 AI 供應鏈容易受激勵，但若台股個股已偏熱，新手仍要等價格位置。" }
+];

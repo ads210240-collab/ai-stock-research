@@ -7,8 +7,8 @@ export default function ThemeTrendForecast({ theme }) {
   return (
     <section className="rounded border border-line bg-white p-4 shadow-soft">
       <p className="text-xs font-semibold uppercase text-muted">Trend Forecast</p>
-      <h2 className="mt-1 text-xl font-semibold">題材趨勢預估</h2>
-      <p className="mt-1 text-sm text-muted">這區在看題材是短線升溫、循環復甦，還是長期結構成長。</p>
+      <h2 className="mt-1 text-xl font-semibold">AI 趨勢推演</h2>
+      <p className="mt-1 text-sm text-muted">這不是預測，而是用目前資料推演短、中、長期可能情境與失效原因。</p>
       <div className="mt-4 grid gap-3 md:grid-cols-3">
         {rows.map(([period, forecast]) => (
           <div key={period} className="rounded border border-line bg-paper p-3">
@@ -18,6 +18,16 @@ export default function ThemeTrendForecast({ theme }) {
           </div>
         ))}
       </div>
+      {theme.invalidationReasons?.length > 0 && (
+        <div className="mt-4 rounded border border-amber-200 bg-amber-50 p-3">
+          <p className="font-semibold text-amber-900">可能失效原因</p>
+          <div className="mt-2 grid gap-2 md:grid-cols-2">
+            {theme.invalidationReasons.map((reason) => (
+              <p key={reason} className="rounded border border-amber-200 bg-white p-2 text-sm leading-6 text-amber-900">{reason}</p>
+            ))}
+          </div>
+        </div>
+      )}
     </section>
   );
 }

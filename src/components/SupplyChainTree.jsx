@@ -1,4 +1,4 @@
-export default function SupplyChainTree({ tree }) {
+export default function SupplyChainTree({ tree, onStock }) {
   return (
     <section className="rounded border border-line bg-white p-4 shadow-soft">
       <p className="text-xs font-semibold uppercase text-muted">AI Supply Chain Tree</p>
@@ -15,10 +15,10 @@ export default function SupplyChainTree({ tree }) {
                   <h3 className="font-semibold">{node.segment}</h3>
                   <p className="mt-1 text-sm leading-6 text-muted">{node.role}</p>
                   <div className="mt-3 grid gap-2 sm:grid-cols-2">
-                    <Group title="龍頭" items={node.leaders} />
-                    <Group title="受惠股" items={node.beneficiaries} />
-                    <Group title="補漲股" items={node.catchUp} />
-                    <Group title="高風險股" items={node.highRisk} />
+                    <Group title="龍頭" items={node.leaders} onStock={onStock} />
+                    <Group title="受惠股" items={node.beneficiaries} onStock={onStock} />
+                    <Group title="補漲股" items={node.catchUp} onStock={onStock} />
+                    <Group title="高風險股" items={node.highRisk} onStock={onStock} />
                   </div>
                 </div>
               </div>
@@ -30,12 +30,26 @@ export default function SupplyChainTree({ tree }) {
   );
 }
 
-function Group({ title, items = [] }) {
+function stockIdFromText(text) {
+  return String(text).match(/\b\d{4}\b/)?.[0];
+}
+
+function Group({ title, items = [], onStock }) {
   return (
     <div className="rounded border border-line bg-white p-2">
       <p className="text-xs font-semibold text-muted">{title}</p>
       <div className="mt-1 flex flex-wrap gap-1">
-        {items.map((item) => <span key={item} className="rounded bg-paper px-2 py-1 text-xs">{item}</span>)}
+        {items.map((item) => {
+          const stockId = stockIdFromText(item);
+          if (stockId && onStock) {
+            return (
+              <button key={item} onClick={() => onStock(stockId)} className="rounded bg-paper px-2 py-1 text-left text-xs hover:bg-blue-50 hover:text-accent">
+                {item}
+              </button>
+            );
+          }
+          return <span key={item} className="rounded bg-paper px-2 py-1 text-xs">{item}</span>;
+        })}
       </div>
     </div>
   );
